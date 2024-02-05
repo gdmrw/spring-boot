@@ -20,6 +20,7 @@ import java.net.URI;
 import java.util.Map;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,9 +68,9 @@ class CorsSampleActuatorApplicationTests {
 	@Test
 	void preflightRequestToEndpointShouldReturnOk() throws Exception {
 		RequestEntity<?> healthRequest = RequestEntity.options(new URI("/actuator/env"))
-			.header("Origin", "http://localhost:8080")
-			.header("Access-Control-Request-Method", "GET")
-			.build();
+				.header("Origin", "http://localhost:8080")
+				.header("Access-Control-Request-Method", "GET")
+				.build();
 		ResponseEntity<?> exchange = this.testRestTemplate.exchange(healthRequest, Map.class);
 		assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
@@ -77,11 +78,53 @@ class CorsSampleActuatorApplicationTests {
 	@Test
 	void preflightRequestWhenCorsConfigInvalidShouldReturnForbidden() throws Exception {
 		RequestEntity<?> entity = RequestEntity.options(new URI("/actuator/env"))
-			.header("Origin", "http://localhost:9095")
-			.header("Access-Control-Request-Method", "GET")
-			.build();
+				.header("Origin", "http://localhost:9095")
+				.header("Access-Control-Request-Method", "GET")
+				.build();
 		ResponseEntity<byte[]> exchange = this.testRestTemplate.exchange(entity, byte[].class);
 		assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
 	}
+	@Test
+	@DisplayName("port boundary test, maximum")
+	void preflightRequestPortBoundaryTestWhenCorsConfigInvalidShouldReturnForbidden() throws Exception {
+		RequestEntity<?> entity = RequestEntity.options(new URI("/actuator/env"))
+				.header("Origin", "http://localhost:65535")
+				.header("Access-Control-Request-Method", "GET")
+				.build();
+		ResponseEntity<byte[]> exchange = this.testRestTemplate.exchange(entity, byte[].class);
+		assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+	}
+
+	@Test
+	@DisplayName("port boundary test2, minimum")
+	void preflightRequestPortBoundaryTest2WhenCorsConfigInvalidShouldReturnForbidden() throws Exception {
+		RequestEntity<?> entity = RequestEntity.options(new URI("/actuator/env"))
+				.header("Origin", "http://localhost:0")
+				.header("Access-Control-Request-Method", "GET")
+				.build();
+		ResponseEntity<byte[]> exchange = this.testRestTemplate.exchange(entity, byte[].class);
+		assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+	}
+
+	@Test
+	@DisplayName("port boundary test3， out of bound")
+	void preflightRequestPortBoundaryTest3WhenCorsConfigInvalidShouldReturnForbidden() throws Exception {
+		RequestEntity<?> entity = RequestEntity.options(new URI("/actuator/env"))
+				.header("Origin", "http://localhost:99999")
+				.header("Access-Control-Request-Method", "GET")
+				.build();
+		ResponseEntity<byte[]> exchange = this.testRestTemplate.exchange(entity, byte[].class);
+		assertThat(exchange.getStatusCode()).isEqualTo(HttpStatus.FORBIDDEN);
+	}
+
+
+
+
+
+
+
+
+
+
 
 }
