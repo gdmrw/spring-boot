@@ -373,8 +373,7 @@ The specific code implementation is as follows：
 ```
 Run the test case, test pass as expected
 
-
-![](/Users/wjx/Desktop/截屏2024-02-04 下午5.36.38.png)
+![](build-success.png)
 
 
 
