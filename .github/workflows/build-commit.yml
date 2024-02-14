@@ -8,7 +8,7 @@ permissions:
 jobs:
   build:
     name: Build commit
-    runs-on: ubuntu22-8-32
+    runs-on: ubuntu-latest
     if: ${{ github.repository == 'gdmrw/spring-boot' }}
     steps:
       - name: Set up JDK 17
