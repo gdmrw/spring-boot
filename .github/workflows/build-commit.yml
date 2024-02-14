@@ -9,7 +9,7 @@ jobs:
   build:
     name: Build commit
     runs-on: ubuntu22-8-32
-    if: ${{ github.repository == 'spring-projects/spring-boot' }}
+    if: ${{ github.repository == 'gdmrw/spring-boot' }}
     steps:
       - name: Set up JDK 17
         uses: actions/setup-java@v4
