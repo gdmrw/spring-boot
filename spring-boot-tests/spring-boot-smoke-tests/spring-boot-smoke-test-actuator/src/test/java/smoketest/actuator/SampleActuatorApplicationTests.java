@@ -72,7 +72,6 @@ class SampleActuatorApplicationTests {
 		entity = asMapEntity(this.restTemplate.getForEntity("/actuator/metrics.json", Map.class));
 		assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
 
-
 	}
 
 	@Test
@@ -195,7 +194,6 @@ class SampleActuatorApplicationTests {
 		assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.FOUND);
 	}
 
-
 	@Test
 	void testLoggersRedirectsToLogin() {
 		ResponseEntity<String> entity = this.restTemplate.getForEntity("/actuator/loggers", String.class);
@@ -211,28 +209,26 @@ class SampleActuatorApplicationTests {
 		assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
 	}
 
-
 	@Test
 	void testHttpStateChangeAfterVerification() {
 		ResponseEntity<String> entity = this.restTemplate.withBasicAuth("user", "password")
-				.getForEntity("/actuator/env", String.class);
+			.getForEntity("/actuator/env", String.class);
 		assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.OK);
 		String body = entity.getBody();
 		assertThat(body).contains("\"java.class.path\"");
 	}
 
-
 	@Test
 	void testHttpStateNotFoundAfterVerification() {
 		ResponseEntity<String> entity = this.restTemplate.withBasicAuth("user", "password")
-				.getForEntity("/actuator/yeeeeeeeeh", String.class);
+			.getForEntity("/actuator/yeeeeeeeeh", String.class);
 		assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
 
 	@Test
 	void testHttpStateChangeToInternalErrorAfterVerification() {
 		ResponseEntity<String> entity = this.restTemplate.withBasicAuth("user", "password")
-				.getForEntity("/foo", String.class);
+			.getForEntity("/foo", String.class);
 		assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 
@@ -245,9 +241,8 @@ class SampleActuatorApplicationTests {
 		assertThat(entity.getBody()).containsKey("build");
 		Map<String, Object> body = entity.getBody();
 		Map<String, Object> example = (Map<String, Object>) body.get("example");
-		assertThat(example).containsEntry("someKey","someValue");
+		assertThat(example).containsEntry("someKey", "someValue");
 	}
-
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	static <K, V> ResponseEntity<Map<K, V>> asMapEntity(ResponseEntity<Map> entity) {
