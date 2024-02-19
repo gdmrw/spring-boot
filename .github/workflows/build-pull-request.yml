@@ -1,15 +1,14 @@
-name: Build on Commit
-
-on: push
+name: Build Pull Request
+on: pull_request
 
 permissions:
   contents: read
 
 jobs:
   build:
-    name: Build commit
-    runs-on: ubuntu-latest
-    if: ${{ github.repository == 'gdmrw/spring-boot' }}
+    name: Build pull request
+    runs-on: ubuntu22-8-32
+    if: ${{ github.repository == 'spring-projects/spring-boot' }}
     steps:
       - name: Set up JDK 17
         uses: actions/setup-java@v4
@@ -21,7 +20,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Validate Gradle wrapper
-        uses: gradle/wrapper-validation-action@27152f6fa06a6b8062ef7195c795692e51fc2c81
+        uses: gradle/wrapper-validation-action@699bb18358f12c5b78b37bb0111d3a0e2276e0e2
 
       - name: Set up Gradle
         uses: gradle/gradle-build-action@3b1b3b9a2104c2b47fbae53f3938079c00c9bb87
