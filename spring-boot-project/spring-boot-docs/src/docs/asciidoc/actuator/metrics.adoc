@@ -815,7 +815,7 @@ By default, Jersey server metrics are tagged with the following information:
 | The request's URI template prior to variable substitution, if possible (for example, `/api/person/\{id}`)
 |===
 
-To customize the tags, provide a `@Bean` that implements `JerseyTagsProvider`.
+To customize the tags, provide a `@Bean` that implements `JerseyObservationConvention`.
 
 
 
@@ -1067,7 +1067,7 @@ Metrics for Jetty's `Connector` instances are bound by using Micrometer's `Jetty
 
 [[actuator.metrics.supported.timed-annotation]]
 ==== @Timed Annotation Support
-To enable scanning of `@Timed` annotations, you will need to set the configprop:micrometer.observations.annotations.enabled[] property to `true`.
+To enable scanning of `@Timed` annotations, you will need to set the configprop:management.observations.annotations.enabled[] property to `true`.
 Please refer to the {micrometer-concepts-docs}#_the_timed_annotation[Micrometer documentation].
 
 
