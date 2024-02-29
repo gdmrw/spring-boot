@@ -21,9 +21,11 @@ import java.util.List;
 import java.util.Map;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -34,9 +36,17 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.web.servlet.MockMvc;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.entry;
+import static org.hamcrest.Matchers.containsString;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Basic integration tests for service demo application.
@@ -45,6 +55,7 @@ import static org.assertj.core.api.Assertions.entry;
  * @author Stephane Nicoll
  */
 @SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
+@AutoConfigureMockMvc
 class SampleActuatorApplicationTests {
 
 	@Autowired
@@ -52,6 +63,32 @@ class SampleActuatorApplicationTests {
 
 	@Autowired
 	private ApplicationContext applicationContext;
+
+	@Mock
+	private TestRestTemplate mockRestTemplate;
+
+
+	@Autowired
+	@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
+	private MockMvc mockMvc;
+
+	@Test
+	void testHomeMock() throws Exception {
+		this.mockMvc.perform(get("/").with(httpBasic("user", "password")))
+				.andExpect(status().isOk())
+				.andExpect(content().string(containsString("Hello Phil")));
+	}
+
+	@Test
+	void testHealthMock() {
+		ResponseEntity<String> mockResponseEntity = new ResponseEntity<>("\"status\":\"UP\"", HttpStatus.OK);
+		when(this.mockRestTemplate.getForEntity("/actuator/health", String.class)).thenReturn(mockResponseEntity);
+
+		ResponseEntity<String> response = this.mockRestTemplate.getForEntity("/actuator/health", String.class);
+		assertEquals(HttpStatus.OK,response.getStatusCode());
+		assertEquals("\"status\":\"UP\"", response.getBody());
+	}
+
 
 	@Test
 	void testHomeIsSecure() {

@@ -16,5 +16,6 @@ dependencies {
 	runtimeOnly("com.h2database:h2")
 
 	testImplementation(project(":spring-boot-project:spring-boot-starters:spring-boot-starter-test"))
+	testImplementation 'org.springframework.security:spring-security-test:6.2.2'
 	testRuntimeOnly("org.apache.httpcomponents.client5:httpclient5")
 }
