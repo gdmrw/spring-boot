@@ -67,7 +67,6 @@ class SampleActuatorApplicationTests {
 	@Mock
 	private TestRestTemplate mockRestTemplate;
 
-
 	@Autowired
 	@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 	private MockMvc mockMvc;
@@ -75,8 +74,8 @@ class SampleActuatorApplicationTests {
 	@Test
 	void testHomeMock() throws Exception {
 		this.mockMvc.perform(get("/").with(httpBasic("user", "password")))
-				.andExpect(status().isOk())
-				.andExpect(content().string(containsString("Hello Phil")));
+			.andExpect(status().isOk())
+			.andExpect(content().string(containsString("Hello Phil")));
 	}
 
 	@Test
@@ -85,10 +84,9 @@ class SampleActuatorApplicationTests {
 		when(this.mockRestTemplate.getForEntity("/actuator/health", String.class)).thenReturn(mockResponseEntity);
 
 		ResponseEntity<String> response = this.mockRestTemplate.getForEntity("/actuator/health", String.class);
-		assertEquals(HttpStatus.OK,response.getStatusCode());
+		assertEquals(HttpStatus.OK, response.getStatusCode());
 		assertEquals("\"status\":\"UP\"", response.getBody());
 	}
-
 
 	@Test
 	void testHomeIsSecure() {
