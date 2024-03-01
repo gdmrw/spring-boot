@@ -47,7 +47,6 @@ public class SampleRestControllerEndpointWithException {
 		}
 
 	}
-
 	static class CustomException extends RuntimeException {
 
 	}
